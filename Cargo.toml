@@ -1,0 +1,17 @@
+
+
+[workspace]
+resolver = "3"
+members = [
+  "compiler/kaic",
+  "compiler/kai-lexer",
+  "compiler/kai-lexer-macro",
+]
+
+
+
+
+
+
+
+
