@@ -1,0 +1,30 @@
+[package]
+name = "kai-lexer"
+version = "0.1.0"
+edition = "2024"
+
+[[bench]]
+name = "lexer_benchmark"
+path = "benches/lexer.rs"
+harness = false
+
+
+
+
+[dependencies]
+glam = { version = "0.30.9", features = ["libm", "serde", "speedy"] }
+phf = { version = "0.13.1", features = ["macros", "phf_macros"] }
+thiserror = "2.0.17"
+kai-lexer-macro = { path = "../kai-lexer-macro" }
+lexical = { version = "7.0.5", features = ["f128", "compact", "f16", "floats", "format", "integers", "lint", "parse", "power-of-two", "radix"] }
+lexical-core = { version = "1.0.6", features = ["f128", "compact", "f16", "floats", "format", "integers", "lint", "parse", "power-of-two", "radix"] }
+lexical-util = { version = "1.0.7", features = ["f128", "compact", "f16", "float16", "parse-floats", "parse-integers", "power-of-two", "radix", "write-floats", "write-integers", "format", "lint"] }
+
+
+[dev-dependencies]
+criterion = { version = "0.7.0", features = ["async", "async_futures", "async_tokio"] }
+proc-macro2 = "1.0.103"
+quote = "1.0.42"
+syn = "2.0.109"
+
+
