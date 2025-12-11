@@ -56,27 +56,27 @@ impl Group {
     }
   }
 
-  pub(crate) fn delimiter(&self)-> Delimiter {
+  pub fn delimiter(&self)-> Delimiter {
     self.delimiter
   }
 
-  pub(crate) fn stream(&self)-> TokenStream {
+  pub fn stream(&self)-> TokenStream {
     self.stream.clone()
   }
 
-  pub(crate) fn span(&self)-> Span {
+  pub fn span(&self)-> Span {
     self.span
   }
 
-  pub(crate) fn span_open(&self)-> Span {
+  pub fn span_open(&self)-> Span {
     self.span.first_byte()
   }
 
-  pub(crate) fn span_close(&self)-> Span {
+  pub fn span_close(&self)-> Span {
     self.span.last_byte()
   }
 
-  pub(crate) fn set_span(&mut self,span: Span) {
+  pub fn set_span(&mut self,span: Span) {
     self.span=span;
   }
 }

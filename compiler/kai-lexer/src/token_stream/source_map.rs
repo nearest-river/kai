@@ -15,7 +15,7 @@ impl SourceMap {
     }
   }
 
-  pub(crate) fn next_start_pos(&self)-> u32 {
+  pub fn next_start_pos(&self)-> u32 {
     // Add 1 so there's always space between files.
     //
     // We'll always have at least 1 file, as we initialize our files list
@@ -23,6 +23,7 @@ impl SourceMap {
     self.files.last().unwrap().span.hi + 1
   }
 
+  #[allow(dead_code)]
   fn add_file(&mut self,src: &str)-> Span {
     let (len,lines)=lines_offsets(src);
     let lo=self.next_start_pos();

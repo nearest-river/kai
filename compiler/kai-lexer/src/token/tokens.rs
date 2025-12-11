@@ -1,13 +1,21 @@
 
 mod ident;
 mod illegal;
-mod literals;
 pub mod comment;
+pub mod literals;
 
-pub use literals::*;
 pub use ident::Ident;
 pub use comment::Comment;
 pub use illegal::Illegal;
+pub use literals::{
+  string::Str,
+  boolean::Bool,
+  character::Char,
+  numbers::{
+    Int,
+    Float,
+  }
+};
 
 
 use crate::prelude::*;

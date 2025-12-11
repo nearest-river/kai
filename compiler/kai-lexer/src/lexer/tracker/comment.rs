@@ -80,6 +80,7 @@ impl CommentLexTracker {
   }
 
   #[inline]
+  #[allow(dead_code)]
   pub const fn suffix_len(&self)-> usize {
     self.kind()
     .suffix_len()

@@ -1,11 +1,16 @@
 
-use crate::token::tokens::comment::CommentKind;
-use super::tracker::{
-  IntKind,
-  StrKind,
-  CharKind,
-  FloatKind,
+use crate::token::tokens::{
+  comment::CommentKind,
+  literals::{
+    string::StrKind,
+    character::CharKind,
+    numbers::{
+      IntKind,
+      FloatKind,
+    },
+  }
 };
+
 
 #[derive(Debug)]
 pub enum TokenHint {

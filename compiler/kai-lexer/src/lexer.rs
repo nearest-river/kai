@@ -3,7 +3,6 @@ mod token_hint;
 pub(crate) mod tracker;
 
 use token_hint::TokenHint;
-pub use tracker::RAW_IDENT_PREFIX;
 
 use crate::{
   token::*,

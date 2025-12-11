@@ -43,16 +43,17 @@ pub struct Span {
   pub(crate) hi: u32,
 }
 
+#[allow(dead_code)]
 impl Span {
   #[inline]
-  const fn new(lo: u32,hi: u32)-> Self {
+  pub(crate) const fn new(lo: u32,hi: u32)-> Self {
     Self {
       lo,
       hi,
     }
   }
 
-  pub(crate) fn call_site()-> Self {
+  pub fn call_site()-> Self {
     Self {
       lo: 0,
       hi: 0,

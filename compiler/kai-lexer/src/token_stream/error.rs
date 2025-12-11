@@ -21,6 +21,7 @@ impl LexErr {
     self.span
   }
 
+  #[allow(dead_code)]
   pub(crate) fn call_site()-> Self {
     Self {
       span: Span::call_site(),

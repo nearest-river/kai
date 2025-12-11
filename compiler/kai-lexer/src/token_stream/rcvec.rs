@@ -28,6 +28,7 @@ pub struct RcVecIntoIter<T> {
   inner: vec::IntoIter<T>,
 }
 
+#[allow(dead_code)]
 impl<T> RcVec<T> {
   pub(crate) fn is_empty(&self)-> bool {
     self.inner.is_empty()
@@ -69,6 +70,7 @@ impl<T> RcVec<T> {
   }
 }
 
+#[allow(dead_code)]
 impl<T> RcVecBuilder<T> {
   pub(crate) fn new()-> Self {
     RcVecBuilder { inner: Vec::new() }
@@ -101,6 +103,7 @@ impl<T> RcVecBuilder<T> {
   }
 }
 
+#[allow(dead_code)]
 impl<'a, T> RcVecMut<'a, T> {
   pub(crate) fn push(&mut self,element: T) {
     self.inner.push(element);
