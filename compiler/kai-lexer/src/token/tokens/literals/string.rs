@@ -16,6 +16,7 @@ pub struct Str {
 pub enum StrKind {
   Str,
   BStr,
+  CStr,
   RStr,
 }
 
@@ -60,6 +61,7 @@ impl StrKind {
     match self {
       Self::Str=> Self::STR_PREFIX,
       Self::BStr=> Self::BSTR_PREFIX,
+      Self::CStr=> Self::CSTR_PREFIX,
       Self::RStr=> Self::RSTR_PREFIX,
     }
   }
@@ -67,7 +69,7 @@ impl StrKind {
   #[inline(always)]
   pub const fn suffix(&self)-> &[u8] {
     match self {
-      Self::Str|Self::BStr=> Self::SUFFIX,
+      Self::Str|Self::BStr|Self::CStr=> Self::SUFFIX,
       Self::RStr=> Self::RSUFFIX,
     }
   }
@@ -87,6 +89,7 @@ impl StrKind {
     match pat {
       Self::STR_PREFIX=> Some(Self::Str),
       Self::BSTR_PREFIX=> Some(Self::BStr),
+      Self::CSTR_PREFIX=> Some(Self::CStr),
       Self::RSTR_PREFIX=> Some(Self::RStr),
       _=> None,
     }
