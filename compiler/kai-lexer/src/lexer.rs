@@ -8,6 +8,7 @@ pub use tracker::RAW_IDENT_PREFIX;
 use crate::{
   token::*,
   prelude::*,
+  token_stream::parse,
 };
 
 use tracker::{
@@ -71,6 +72,11 @@ impl<'b> Lexer<'b> {
   #[inline(always)]
   pub const fn eof_in(&self,count: usize)-> bool {
     self.cursor+count-1>=self.buf.len()
+  }
+
+  #[inline]
+  pub fn parse(self)-> Result<TokenStream,LexErr> {
+    parse::parse(self)
   }
 }
 

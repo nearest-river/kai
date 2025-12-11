@@ -1,8 +1,5 @@
 
-use crate::{
-  token::*,
-  prelude::*,
-};
+use crate::token::*;
 
 
 // This thing is a zero-cost abstarction.
@@ -122,10 +119,125 @@ pub enum Leaf {
   Yield(Yield),
 }
 
-
-impl TokenExt for Leaf {
+impl Leaf {
   #[inline]
-  fn into_token(self)-> Token {
+  pub fn try_from(token: Token)-> Option<Leaf> {
+    token.into()
+  }
+}
+
+
+impl From<Token> for Option<Leaf> {
+  #[inline]
+  fn from(token: Token)-> Option<Leaf> {
+    let leaf=match token {
+      Token::Ident(token)=> Leaf::Ident(token),
+      Token::Comment(token)=> Leaf::Comment(token),
+      Token::Illegal(token)=> Leaf::Illegal(token),
+      Token::Str(token)=> Leaf::Str(token),
+      Token::Char(token)=> Leaf::Char(token),
+      Token::Bool(token)=> Leaf::Bool(token),
+      Token::Float(token)=> Leaf::Float(token),
+      Token::Int(token)=> Leaf::Int(token),
+      Token::Unsafe(token)=> Leaf::Unsafe(token),
+      Token::Super(token)=> Leaf::Super(token),
+      Token::This(token)=> Leaf::This(token),
+      Token::At(token)=> Leaf::At(token),
+      Token::And(token)=> Leaf::And(token),
+      Token::AndAnd(token)=> Leaf::AndAnd(token),
+      Token::AndEq(token)=> Leaf::AndEq(token),
+      Token::Caret(token)=> Leaf::Caret(token),
+      Token::CaretEq(token)=> Leaf::CaretEq(token),
+      Token::Colon(token)=> Leaf::Colon(token),
+      Token::Comma(token)=> Leaf::Comma(token),
+      Token::Dollar(token)=> Leaf::Dollar(token),
+      Token::Dot(token)=> Leaf::Dot(token),
+      Token::DotDot(token)=> Leaf::DotDot(token),
+      Token::DotDotDot(token)=> Leaf::DotDotDot(token),
+      Token::DotDotEq(token)=> Leaf::DotDotEq(token),
+      Token::Equal(token)=> Leaf::Equal(token),
+      Token::EqualEqual(token)=> Leaf::EqualEqual(token),
+      Token::FatArrow(token)=> Leaf::FatArrow(token),
+      Token::Ge(token)=> Leaf::Ge(token),
+      Token::Gt(token)=> Leaf::Gt(token),
+      Token::Le(token)=> Leaf::Le(token),
+      Token::Lt(token)=> Leaf::Lt(token),
+      Token::LArrow(token)=> Leaf::LArrow(token),
+      Token::Minus(token)=> Leaf::Minus(token),
+      Token::MinusEq(token)=> Leaf::MinusEq(token),
+      Token::NotEq(token)=> Leaf::NotEq(token),
+      Token::Not(token)=> Leaf::Not(token),
+      Token::Or(token)=> Leaf::Or(token),
+      Token::OrEq(token)=> Leaf::OrEq(token),
+      Token::OrOr(token)=> Leaf::OrOr(token),
+      Token::PathSep(token)=> Leaf::PathSep(token),
+      Token::Percent(token)=> Leaf::Percent(token),
+      Token::PercentEq(token)=> Leaf::PercentEq(token),
+      Token::Plus(token)=> Leaf::Plus(token),
+      Token::PlusEq(token)=> Leaf::PlusEq(token),
+      Token::Pound(token)=> Leaf::Pound(token),
+      Token::Question(token)=> Leaf::Question(token),
+      Token::RArrow(token)=> Leaf::RArrow(token),
+      Token::SemiColon(token)=> Leaf::SemiColon(token),
+      Token::Shl(token)=> Leaf::Shl(token),
+      Token::Shr(token)=> Leaf::Shr(token),
+      Token::ShlEq(token)=> Leaf::ShlEq(token),
+      Token::ShrEq(token)=> Leaf::ShrEq(token),
+      Token::Slash(token)=> Leaf::Slash(token),
+      Token::SlashEq(token)=> Leaf::SlashEq(token),
+      Token::Star(token)=> Leaf::Star(token),
+      Token::StarEq(token)=> Leaf::StarEq(token),
+      Token::Underscore(token)=> Leaf::Underscore(token),
+      Token::As(token)=> Leaf::As(token),
+      Token::In(token)=> Leaf::In(token),
+      Token::Fn(token)=> Leaf::Fn(token),
+      Token::Struct(token)=> Leaf::Struct(token),
+      Token::Const(token)=> Leaf::Const(token),
+      Token::Let(token)=> Leaf::Let(token),
+      Token::Static(token)=> Leaf::Static(token),
+      Token::Enum(token)=> Leaf::Enum(token),
+      Token::Impl(token)=> Leaf::Impl(token),
+      Token::Trait(token)=> Leaf::Trait(token),
+      Token::Async(token)=> Leaf::Async(token),
+      Token::Type(token)=> Leaf::Type(token),
+      Token::Extern(token)=> Leaf::Extern(token),
+      Token::Mod(token)=> Leaf::Mod(token),
+      Token::Use(token)=> Leaf::Use(token),
+      Token::Default(token)=> Leaf::Default(token),
+      Token::Dyn(token)=> Leaf::Dyn(token),
+      Token::Ref(token)=> Leaf::Ref(token),
+      Token::Pub(token)=> Leaf::Pub(token),
+      Token::Break(token)=> Leaf::Break(token),
+      Token::Continue(token)=> Leaf::Continue(token),
+      Token::Return(token)=> Leaf::Return(token),
+      Token::Yeet(token)=> Leaf::Yeet(token),
+      Token::Await(token)=> Leaf::Await(token),
+      Token::If(token)=> Leaf::If(token),
+      Token::Else(token)=> Leaf::Else(token),
+      Token::Match(token)=> Leaf::Match(token),
+      Token::While(token)=> Leaf::While(token),
+      Token::For(token)=> Leaf::For(token),
+      Token::Loop(token)=> Leaf::Loop(token),
+      Token::Macro(token)=> Leaf::Macro(token),
+      Token::Move(token)=> Leaf::Move(token),
+      Token::Mut(token)=> Leaf::Mut(token),
+      Token::Raw(token)=> Leaf::Raw(token),
+      Token::SelfType(token)=> Leaf::SelfType(token),
+      Token::SelfValue(token)=> Leaf::SelfValue(token),
+      Token::Typeof(token)=> Leaf::Typeof(token),
+      Token::Union(token)=> Leaf::Union(token),
+      Token::Where(token)=> Leaf::Where(token),
+      Token::Yield(token)=> Leaf::Yield(token),
+      Token::LParen(_)|Token::RParen(_)|Token::LBrace(_)|Token::RBrace(_)|Token::LBracket(_)|Token::RBracket(_)=> return None,
+    };
+
+    Some(leaf)
+  }
+}
+
+impl Into<Token> for Leaf {
+  #[inline]
+  fn into(self)-> Token {
     match self {
       Leaf::Ident(token)=> Token::Ident(token),
       Leaf::Comment(token)=> Token::Comment(token),

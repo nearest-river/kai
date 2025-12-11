@@ -11,7 +11,9 @@ pub mod token;
 pub mod lexer;
 pub mod token_stream;
 
+pub use span::Span;
 pub use lexer::Lexer;
+pub use token_stream::TokenStream;
 pub use token::{
   Token,
   TokenExt,

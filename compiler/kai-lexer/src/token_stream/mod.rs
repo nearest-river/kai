@@ -9,14 +9,18 @@ pub(crate) mod location;
 pub(crate) mod file_info;
 pub(crate) mod source_map;
 
+
 pub use leaf::Leaf;
-use crate::prelude::*;
 pub use error::LexErr;
 pub use group::{
   Group,
   Delimiter,
 };
 
+use crate::{
+  Lexer,
+  prelude::*,
+};
 
 use std::{
   ptr,
@@ -55,6 +59,10 @@ impl TokenStream {
     TokenStream {
       inner: RcVecBuilder::new().build()
     }
+  }
+
+  pub fn parse(buf: &[u8])-> Result<Self,LexErr> {
+    parse::parse(Lexer::new(buf))
   }
 
   pub fn is_empty(&self)-> bool {
@@ -148,7 +156,7 @@ impl Drop for TokenStream {
 
       match stack.pop() {
         Some(next)=> current=next,
-        None=> continue,
+        None=> return,
       }
     }
   }
@@ -157,14 +165,14 @@ impl Drop for TokenStream {
 impl FromStr for TokenStream {
   type Err=LexErr;
 
-  fn from_str(s: &str)-> Result<Self,Self::Err> {
+  fn from_str(mut s: &str)-> Result<Self,Self::Err> {
     // Strip a byte order mark if present
-    const BYTE_ORDER_MARK: &str = "\u{feff}";
+    const BYTE_ORDER_MARK: &str="\u{feff}";
     if s.starts_with(BYTE_ORDER_MARK) {
+      s=&s[BYTE_ORDER_MARK.len()..]
     }
 
-
-    Ok(todo!())
+    TokenStream::parse(s.as_bytes())
   }
 }
 
@@ -178,6 +186,7 @@ impl TokenStreamBuilder {
     }
   }
 
+  #[allow(dead_code)]
   pub(crate) fn with_capacity(cap: usize)-> Self {
     Self {
       inner: RcVecBuilder::with_capacity(cap)

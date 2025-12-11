@@ -23,7 +23,7 @@ impl LexErr {
 
   pub(crate) fn call_site()-> Self {
     Self {
-      span: Span::call_site()
+      span: Span::call_site(),
     }
   }
 }

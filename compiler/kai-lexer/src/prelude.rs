@@ -3,6 +3,7 @@ pub(crate) use crate::{
   marker::*,
   span::Span,
   token_stream::{
+    LexErr,
     rcvec::*,
     TokenStream,
     location::LineColumn,
