@@ -113,13 +113,13 @@ impl NumberLexTracker {
       (Self::Bin,b'0'|b'1'|b'_')=> return None,
       (Self::Dec(_),b'0'..=b'9'|b'_')=> return None,
       (Self::Dec(props),b'.')=> return props.toggle_dot().then_some(TokenHint::INFERRED_FLOAT),
-      (Self::Dec(props),b'e')=> return props.toggle_exp().then_some(TokenHint::INFERRED_FLOAT),
+      (Self::Dec(props),b'e'|b'E')=> return props.toggle_exp().then_some(TokenHint::INFERRED_FLOAT),
       (Self::Dec(props),b'-')=> return props.toggle_neg().then_some(TokenHint::INFERRED_FLOAT),
       _=> (),
     };
 
     for &suffix in INT_SUFFIXES {
-      if buf.starts_with(suffix) && let Some(kind)=IntKind::from_suffix(suffix) {
+      if starts_with_ignore_ascii_case(buf,suffix) && let Some(kind)=IntKind::from_suffix(suffix) {
         return Some(TokenHint::Int(Some(kind)));
       }
     }
@@ -130,7 +130,7 @@ impl NumberLexTracker {
     }
 
     for &suffix in FLOAT_SUFFIXES {
-      if buf.starts_with(suffix) && let Some(kind)=FloatKind::from_suffix(suffix) {
+      if starts_with_ignore_ascii_case(buf,suffix) && let Some(kind)=FloatKind::from_suffix(suffix) {
         return Some(TokenHint::Float(Some(kind)));
       }
     }
@@ -219,20 +219,22 @@ impl IntKind {
   #[inline]
   pub const fn from_suffix(suffix: &[u8])-> Option<Self> {
     let kind=match suffix {
-      b"u8"=> Self::U8,
-      b"u16"=> Self::U16,
-      b"u32"=> Self::U32,
-      b"u64"=> Self::U64,
-      b"u128"=> Self::U128,
-      b"u256"=> Self::U256,
+      b"u8"|b"U8"=> Self::U8,
+      b"u16"|b"U16"=> Self::U16,
+      b"u32"|b"U32"=> Self::U32,
+      b"u64"|b"U64"=> Self::U64,
+      b"u128"|b"U128"=> Self::U128,
+      b"u256"|b"U256"=> Self::U256,
       b"usize"=> Self::Usize,
-      b"i8"=> Self::I8,
-      b"i16"=> Self::I16,
-      b"i32"=> Self::I32,
-      b"i64"=> Self::I64,
-      b"i128"=> Self::I128,
-      b"i256"=> Self::I256,
+      b"i8"|b"I8"=> Self::I8,
+      b"i16"|b"I16"=> Self::I16,
+      b"i32"|b"I32"=> Self::I32,
+      b"i64"|b"I64"=> Self::I64,
+      b"i128"|b"I128"=> Self::I128,
+      b"i256"|b"I256"=> Self::I256,
       b"isize"=> Self::Isize,
+      suffix if suffix.eq_ignore_ascii_case(b"usize")=> Self::Usize,
+      suffix if suffix.eq_ignore_ascii_case(b"isize")=> Self::Isize,
       _=> return None,
     };
 
@@ -259,16 +261,45 @@ impl FloatKind {
   #[inline]
   pub const fn from_suffix(suffix: &[u8])-> Option<Self> {
     let kind=match suffix {
-      b"f16"=> Self::F16,
-      b"f32"=> Self::F32,
-      b"f64"=> Self::F64,
-      b"f128"=> Self::F128,
+      b"f16"|b"F16"=> Self::F16,
+      b"f32"|b"F32"=> Self::F32,
+      b"f64"|b"F64"=> Self::F64,
+      b"f128"|b"F128"=> Self::F128,
       _=> return None,
     };
 
     Some(kind)
   }
 }
+
+
+#[inline]
+const fn starts_with_ignore_ascii_case(heystack: &[u8],needle: &[u8])-> bool {
+  let n=needle.len();
+  if heystack.len()<n {
+    return false;
+  }
+
+  let mut i=0usize;
+  while i<n {
+    if !heystack[i].eq_ignore_ascii_case(&needle[i]) {
+      return false;
+    }
+
+    i+=1;
+  }
+
+  true
+}
+
+
+
+
+
+
+
+
+
 
 
 
