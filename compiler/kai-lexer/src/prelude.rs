@@ -9,8 +9,8 @@ pub(crate) use crate::{
     location::LineColumn,
   },
   token::{
-    Token,
-    TokenExt,
+    *,
+    illegal::*,
   }
 };
 

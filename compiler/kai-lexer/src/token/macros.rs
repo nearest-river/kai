@@ -367,6 +367,32 @@ macro_rules! define_punctuation_structs {
 
 
 
+#[macro_export]
+macro_rules! impl_literal_partial_eqs {
+  (
+    $name:ident:
+    $($ty:ty => $en:ident::$varient:ident,)*
+  )=> {
+    impl std::cmp::Eq for $name {}
+    impl PartialEq for $name {
+      fn eq(&self,other: &Self)-> bool {
+        if let Some(k1)=self.kind && let Some(k2)=other.kind && k1!=k2 {
+          return false;
+        }
+
+        self.repr==other.repr
+      }
+    }
+    $(
+    impl PartialEq<$ty> for $name {
+      #[inline(always)]
+      fn eq(&self,other: &$ty)-> bool {
+        matches!(self.kind,Some($en::$varient)|None) && self.repr==*(other) as _
+      }
+    }
+    )*
+  };
+}
 
 
 

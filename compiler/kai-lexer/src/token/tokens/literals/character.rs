@@ -1,5 +1,13 @@
 
-use crate::prelude::*;
+use crate::{
+  token::*,
+  prelude::*,
+};
+
+use super::numbers::{
+  Int,
+  IntKind,
+};
 
 
 #[derive(Clone)]
@@ -22,14 +30,31 @@ impl_literal_tokens! {
 }
 
 impl Char {
+
+
   #[inline]
   // TODO(nate): impl escape seq
-  pub fn parse_token(_buf: &[u8],span: Span,_kind: CharKind)-> Token {
-    Self {
-      span,
-      repr: '\0',
-      _marker: MARKER
-    }.into_token()
+  pub fn parse_token(buf: &[u8],span: Span,kind: CharKind)-> Token {
+    let chars=str::from_utf8(buf)
+    .unwrap()
+    .chars()
+    .collect::<Vec<_>>();
+
+    match (kind,&chars[..]) {
+      (CharKind::Char,['\'',ch,'\''])=> {
+        Char {
+          span,
+          repr: *ch,
+          _marker: MARKER,
+        }.into_token()
+      },
+      (CharKind::BChar,['b','\'',ch,'\''])=> {
+        let repr=*ch as u8 as u128;
+        Int::new(repr,span,Some(IntKind::U8))
+        .into_token()
+      },
+      _=> return Illegal::new(buf,span,None).into_token(), // TODO(nate): fix reason
+    }
   }
 }
 

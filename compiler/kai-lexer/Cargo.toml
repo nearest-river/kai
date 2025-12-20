@@ -19,6 +19,9 @@ kai-lexer-macro = { path = "../kai-lexer-macro" }
 lexical = { version = "7.0.5", features = ["f128", "compact", "f16", "floats", "format", "integers", "lint", "parse", "power-of-two", "radix"] }
 lexical-core = { version = "1.0.6", features = ["f128", "compact", "f16", "floats", "format", "integers", "lint", "parse", "power-of-two", "radix"] }
 lexical-util = { version = "1.0.7", features = ["f128", "compact", "f16", "float16", "parse-floats", "parse-integers", "power-of-two", "radix", "write-floats", "write-integers", "format", "lint"] }
+unicode-ident = "1.0.22"
+unicode-id-start = "1.4.0"
+unescape = "0.1.0"
 
 
 [dev-dependencies]

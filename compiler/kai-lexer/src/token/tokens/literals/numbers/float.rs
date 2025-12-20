@@ -1,5 +1,12 @@
 
 use crate::prelude::*;
+use std::{
+  fmt::{
+    self,
+    Debug,
+    Formatter,
+  }
+};
 
 
 pub static FLOAT_SUFFIXES: &[&[u8]]=&[
@@ -13,8 +20,9 @@ pub static FLOAT_SUFFIXES: &[&[u8]]=&[
 
 #[derive(Clone)]
 pub struct Float {
-  pub repr: Box<str>,
+  pub repr: f64,
   pub span: Span,
+  pub kind: Option<FloatKind>,
   _marker: ProcMacroAutoTraits,
 }
 
@@ -31,20 +39,19 @@ pub enum FloatKind {
 
 impl Float {
   #[inline]
-  pub fn parse_token(buf: &[u8],span: Span,_kind: Option<FloatKind>)-> Token {
-    let repr=str::from_utf8(buf)
-    .expect("ain't it supposed to be utf-8")
-    .into();
+  pub fn parse_token(buf: &[u8],span: Span,kind: Option<FloatKind>)-> Token {
+    let repr=match lexical_core::parse::<f64>(buf) {
+      Ok(repr)=> repr,
+      Err(err)=> return Illegal::new(buf,span,Some(err.into())).into_token(),
+    };
+
     Self {
       span,
+      kind,
       repr,
       _marker: MARKER
     }.into_token()
   }
-}
-
-impl_repr_tokens! {
-  Float
 }
 
 impl FloatKind {
@@ -77,56 +84,34 @@ impl FloatKind {
   }
 }
 
-
-
-/*
-impl Debug for Float {
-  fn fmt(&self, f: &mut Formatter<'_>)-> fmt::Result {
-    f.write_str(stringify!(Float))
+impl TokenExt for Float {
+  #[inline]
+  fn into_token(self)-> Token {
+    Token::Float(self)
   }
-}*/
+}
 
-
-
-/*
-    impl std::fmt::Debug for $name {
-      fn fmt(&self,f: &mut std::fmt::Formatter<'_>)-> std::fmt::Result {
-        f.write_str(stringify!($name))?;
-        if f.alternate() {
-          write!(f,"({:#?})",self.repr)
-        } else {
-          write!(f,"({:?})",self.repr)
-        }
-      }
+impl Debug for Float {
+  fn fmt(&self,f: &mut Formatter<'_>)-> fmt::Result {
+    if f.alternate() {
+      return write!(f,"{}",self.repr);
     }
 
-    impl std::cmp::Eq for $name {}
-    impl PartialEq for $name {
-      fn eq(&self,other: &$name)-> bool {
-        self.repr==other.repr
-      }
-    }
+    let mut dbg=f.debug_struct(stringify!(Float));
 
-    impl std::hash::Hash for $name {
-      fn hash<H: std::hash::Hasher>(&self,state: &mut H) {
-        self.repr.hash(state);
-      }
-    }
-
-    impl $crate::token::TokenExt for $name {
-      fn into_token(self)-> $crate::token::Token {
-        $crate::token::Token::$name(self)
-      }
-    }
-*/
+    dbg.field("repr",&self.repr);
+    dbg.field("kind",&self.kind);
+    dbg.field("span",&self.span);
+    dbg.finish()
+  }
+}
 
 
-
-
-
-
-
-
+impl_literal_partial_eqs! {
+  Float:
+  f32 => FloatKind::F32,
+  f64 => FloatKind::F64,
+}
 
 
 

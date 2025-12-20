@@ -1,5 +1,12 @@
 
 use crate::prelude::*;
+use std::{
+  fmt::{
+    self,
+    Debug,
+    Formatter,
+  }
+};
 
 pub static HEX_PREFIX: &[u8]=b"0x";
 pub static OCT_PREFIX: &[u8]=b"0o";
@@ -22,14 +29,46 @@ pub static INT_SUFFIXES: &[&[u8]]=&[
   IntKind::Isize.as_str().as_bytes(),
 ];
 
+#[allow(dead_code)]
+// definitely gonne be used later.
+mod consts {
+  pub(in super) const I8_MAX: u128=i8::MAX.cast_unsigned() as u128;
+  pub(in super) const I8_MIN: u128=i8::MIN.cast_unsigned() as u128;
+  pub(in super) const I16_MAX: u128=i16::MAX.cast_unsigned() as u128;
+  pub(in super) const I16_MIN: u128=i16::MIN.cast_unsigned() as u128;
+  pub(in super) const I32_MAX: u128=i32::MAX.cast_unsigned() as u128;
+  pub(in super) const I32_MIN: u128=i32::MIN.cast_unsigned() as u128;
+  pub(in super) const I64_MAX: u128=i64::MAX.cast_unsigned() as u128;
+  pub(in super) const I64_MIN: u128=i64::MIN.cast_unsigned() as u128;
+  pub(in super) const I128_MAX: u128=i128::MAX.cast_unsigned() as u128;
+  pub(in super) const I128_MIN: u128=i128::MIN.cast_unsigned() as u128;
+  pub(in super) const ISIZE_MAX: u128=isize::MAX.cast_unsigned() as u128;
+  pub(in super) const ISIZE_MIN: u128=isize::MIN.cast_unsigned() as u128;
+
+  pub(in super) const U8_MAX: u128=u8::MAX as u128;
+  pub(in super) const U8_MIN: u128=u8::MIN as u128;
+  pub(in super) const U16_MAX: u128=u16::MAX as u128;
+  pub(in super) const U16_MIN: u128=u16::MIN as u128;
+  pub(in super) const U32_MAX: u128=u32::MAX as u128;
+  pub(in super) const U32_MIN: u128=u32::MIN as u128;
+  pub(in super) const U64_MAX: u128=u64::MAX as u128;
+  pub(in super) const U64_MIN: u128=u64::MIN as u128;
+  pub(in super) const U128_MAX: u128=u128::MAX as u128;
+  pub(in super) const U128_MIN: u128=u128::MIN as u128;
+  pub(in super) const USIZE_MAX: u128=usize::MAX as u128;
+  pub(in super) const USIZE_MIN: u128=usize::MIN as u128;
+}
+
 
 
 #[derive(Clone)]
 pub struct Int {
-  pub repr: Box<str>,
+  pub repr: u128,
   pub span: Span,
+  pub kind: Option<IntKind>,
   _marker: ProcMacroAutoTraits,
 }
+
 
 #[repr(u8)]
 #[derive(Debug,Clone,Copy,PartialEq,Eq,Hash,Default)]
@@ -53,24 +92,40 @@ pub enum IntKind {
 
 
 
-impl_literal_tokens! {
-  Int
-}
-
 impl Int {
   #[inline]
-  pub fn parse_token(buf: &[u8],span: Span,_kind: Option<IntKind>)-> Token {
-    let repr=str::from_utf8(buf)
-    .expect("ain't it supposed to be utf-8")
-    .into();
+  pub fn new(repr: u128,span: Span,kind: Option<IntKind>)-> Self {
+    Self {
+      span,
+      kind,
+      repr,
+      _marker: MARKER,
+    }
+  }
+
+  #[inline]
+  // FIXME(nate)
+  pub fn parse_token(buf: &[u8],span: Span,kind: Option<IntKind>)-> Token {
+    let repr=match lexical_core::parse::<u128>(buf) {
+      Ok(repr)=> repr,
+      Err(err)=> return Illegal::new(buf,span,Some(err.into())).into_token(),
+    };
+
     Self {
       span,
       repr,
+      kind,
       _marker: MARKER
     }.into_token()
   }
 }
 
+impl TokenExt for Int {
+  #[inline]
+  fn into_token(self)-> Token {
+    Token::Int(self)
+  }
+}
 
 impl IntKind {
   #[inline]
@@ -122,6 +177,55 @@ impl IntKind {
 
     Some(kind)
   }
+
+
+  #[inline]
+  pub const fn signed(&self)-> bool {
+    match self {
+      Self::I8|Self::I16|Self::I32|Self::I64|Self::I128|Self::I256|Self::Isize=> true,
+      Self::U8|Self::U16|Self::U32|Self::U64|Self::U128|Self::U256|Self::Usize=> false,
+    }
+  }
 }
+
+
+impl Debug for Int {
+  fn fmt(&self,f: &mut Formatter<'_>)-> fmt::Result {
+    if f.alternate() {
+      return write!(f,"{}",self.repr);
+    }
+
+    let mut dbg=f.debug_struct(stringify!(Float));
+
+    dbg.field("repr",&self.repr);
+    dbg.field("kind",&self.kind);
+    dbg.field("span",&self.span);
+    dbg.finish()
+  }
+}
+
+impl_literal_partial_eqs! {
+  Int:
+  u8 => IntKind::U8,
+  u16 => IntKind::U16,
+  u32 => IntKind::U32,
+  u64 => IntKind::U64,
+  u128 => IntKind::U128,
+  usize => IntKind::Usize,
+  i8 => IntKind::I8,
+  i16 => IntKind::I16,
+  i32 => IntKind::I32,
+  i64 => IntKind::I64,
+  i128 => IntKind::I128,
+  isize => IntKind::Isize,
+}
+
+impl Hash for Int {
+  fn hash<H: Hasher>(&self,state: &mut H) {
+    self.repr.hash(state);
+    self.kind.hash(state);
+  }
+}
+
 
 

@@ -1,6 +1,6 @@
 
 mod ident;
-mod illegal;
+pub mod illegal;
 pub mod comment;
 pub mod literals;
 

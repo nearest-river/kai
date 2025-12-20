@@ -1,9 +1,6 @@
 
 use super::TokenExt;
-use crate::{
-  prelude::*,
-  token::Illegal,
-};
+use crate::prelude::*;
 
 
 #[derive(Clone)]
@@ -15,18 +12,18 @@ pub struct Ident {
 
 impl Ident {
   pub fn parse_token(buf: &[u8],span: Span)-> Token {
-    static REASON: &str="invalid identifier";
+    let reason=Reason::Other("invalid identifier".into());
 
     match buf.get(0) {
       Some(b'_')=> (),
       Some(byte) if byte.is_ascii_alphabetic()=> (),
-      Some(_)=> return Illegal::new(buf,span,Some(REASON)).into_token(),
+      Some(_)=> return Illegal::new(buf,span,Some(reason)).into_token(),
       None=> unreachable!(),
     }
 
     for &byte in buf.iter().skip(1) {
       if !byte.is_ascii_alphanumeric() && !byte==b'_' {
-        return Illegal::new(buf,span,Some(REASON)).into_token();
+        return Illegal::new(buf,span,Some(reason)).into_token();
       }
     }
 

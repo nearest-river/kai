@@ -1,5 +1,12 @@
 
 use crate::prelude::*;
+use std::{
+  fmt::{
+    self,
+    Debug,
+    Formatter,
+  }
+};
 
 
 #[derive(Clone)]
@@ -21,10 +28,6 @@ pub enum StrKind {
 }
 
 
-impl_literal_tokens! {
-  Str
-}
-
 impl Str {
   #[inline]
   pub fn parse_token(buf: &[u8],span: Span,kind: StrKind)-> Token {
@@ -37,12 +40,6 @@ impl Str {
       kind,
       _marker: MARKER
     }.into_token()
-  }
-}
-
-impl<S: AsRef<str>> PartialEq<S> for Str {
-  fn eq(&self,other: &S) -> bool {
-    other.as_ref()==&*self.repr
   }
 }
 
@@ -96,6 +93,47 @@ impl StrKind {
   }
 }
 
+impl TokenExt for Str {
+  #[inline]
+  fn into_token(self)-> Token {
+    Token::Str(self)
+  }
+}
 
+
+impl Debug for Str {
+  fn fmt(&self,f: &mut Formatter<'_>)-> fmt::Result {
+    if f.alternate() {
+      f.write_str(stringify!(Str))?;
+      return write!(f,"({})",self.repr);
+    }
+
+    let mut dbg=f.debug_struct(stringify!(Str));
+
+    dbg.field("repr",&self.repr);
+    dbg.field("span",&self.span);
+    dbg.field("kind",&self.kind);
+    dbg.finish()
+  }
+}
+
+impl Eq for Str {}
+impl PartialEq for Str {
+  fn eq(&self,other: &Self)-> bool {
+    self.kind==other.kind && self.repr==other.repr
+  }
+}
+
+impl<S: AsRef<str>> PartialEq<S> for Str {
+  fn eq(&self,other: &S) -> bool {
+    other.as_ref()==&*self.repr
+  }
+}
+
+impl Hash for Str {
+  fn hash<H: Hasher>(&self,state: &mut H) {
+    self.repr.hash(state);
+  }
+}
 
 

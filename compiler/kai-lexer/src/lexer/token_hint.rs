@@ -1,5 +1,6 @@
 
 use crate::token::tokens::{
+  illegal::Reason,
   comment::CommentKind,
   literals::{
     string::StrKind,
@@ -19,7 +20,7 @@ pub enum TokenHint {
   Str(StrKind),
   Char(CharKind),
   Comment(CommentKind),
-  Illegal(Option<&'static str>),
+  Illegal(Option<Reason>),
   Other,
 }
 

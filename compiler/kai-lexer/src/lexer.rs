@@ -40,7 +40,7 @@ impl<'b> Lexer<'b> {
   #[inline(always)]
   const fn update(&mut self,count: usize) {
     self.cursor+=count;
-    // update line and bol if new line is reached.
+    // TODO(nate): update line and bol if new line is reached.
   }
 
   #[inline(always)]
@@ -202,7 +202,8 @@ impl Lexer<'_> {
         i+=1;
       }
 
-      return (i,TokenHint::Illegal(Some("missing */")));
+      let reason=Reason::ParseCommentErr("missing */");
+      return (i,TokenHint::Illegal(Some(reason)));
     }
 
 
@@ -381,10 +382,6 @@ impl Lexer<'_> {
     }
   }
 }
-
-
-
-
 
 
 
