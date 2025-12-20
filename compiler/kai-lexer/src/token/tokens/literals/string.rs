@@ -1,11 +1,9 @@
 
 use crate::prelude::*;
-use std::{
-  fmt::{
-    self,
-    Debug,
-    Formatter,
-  }
+use std::fmt::{
+  self,
+  Debug,
+  Formatter,
 };
 
 
@@ -31,9 +29,25 @@ pub enum StrKind {
 impl Str {
   #[inline]
   pub fn parse_token(buf: &[u8],span: Span,kind: StrKind)-> Token {
-    let repr=str::from_utf8(buf)
-    .expect("ain't it supposed to be utf-8")
-    .into();
+    let repr=match buf {
+      b"\"\""=> Some("".into()),
+      buf if buf.len()<3=> {
+        let reason=Some(Reason::Other("not valid string literal".into()));
+        return Illegal::new(buf,span,reason).into_token();
+      },
+      buf=> {
+        let unquoted=&buf[kind.prefix_len()..buf.len()-kind.suffix_len()];
+        str::from_utf8(unquoted)
+        .ok()
+        .and_then(unescape::unescape)
+      },
+    };
+
+    let repr=match repr {
+      Some(repr)=> repr.into_boxed_str(),
+      None=> return Illegal::new(buf,span,Some(Reason::Other("invalid escape sequense".into()))).into_token(),
+    };
+
     Self {
       span,
       repr,
@@ -105,7 +119,7 @@ impl Debug for Str {
   fn fmt(&self,f: &mut Formatter<'_>)-> fmt::Result {
     if f.alternate() {
       f.write_str(stringify!(Str))?;
-      return write!(f,"({})",self.repr);
+      return write!(f,"({:#?})",self.repr);
     }
 
     let mut dbg=f.debug_struct(stringify!(Str));

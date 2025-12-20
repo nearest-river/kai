@@ -9,6 +9,12 @@ use super::numbers::{
   IntKind,
 };
 
+use std::fmt::{
+  self,
+  Debug,
+  Formatter,
+};
+
 
 #[derive(Clone)]
 pub struct Char {
@@ -25,36 +31,58 @@ pub enum CharKind {
 }
 
 
-impl_literal_tokens! {
-  Char
-}
+
 
 impl Char {
-
-
   #[inline]
   // TODO(nate): impl escape seq
   pub fn parse_token(buf: &[u8],span: Span,kind: CharKind)-> Token {
-    let chars=str::from_utf8(buf)
-    .unwrap()
-    .chars()
-    .collect::<Vec<_>>();
+    let repr=match buf {
+      buf if buf.len()<3=> {
+        let reason=Some(Reason::Other("not valid char literal".into()));
+        return Illegal::new(buf,span,reason).into_token();
+      },
+      buf=> {
+        let unquoted=&buf[kind.prefix_len()..buf.len()-kind.suffix_len()];
+        str::from_utf8(unquoted)
+        .ok()
+        .and_then(unescape::unescape)
+      },
+    };
 
-    match (kind,&chars[..]) {
-      (CharKind::Char,['\'',ch,'\''])=> {
-        Char {
-          span,
-          repr: *ch,
-          _marker: MARKER,
-        }.into_token()
-      },
-      (CharKind::BChar,['b','\'',ch,'\''])=> {
-        let repr=*ch as u8 as u128;
-        Int::new(repr,span,Some(IntKind::U8))
-        .into_token()
-      },
-      _=> return Illegal::new(buf,span,None).into_token(), // TODO(nate): fix reason
+    let ch=match repr {
+      Some(repr)=> repr.chars().nth(0),
+      None=> return Illegal::new(buf,span,Some(Reason::Other("invalid escape sequense".into()))).into_token(),
+    };
+
+    let repr=match ch {
+      Some(ch)=> ch,
+      None=> return Illegal::new(buf,span,Some(Reason::Other("empty char".into()))).into_token(),
+    };
+
+
+    match kind {
+      CharKind::Char=> Char {
+        span,
+        repr,
+        _marker: MARKER,
+      }.into_token(),
+      CharKind::BChar=> Int::new(repr as u8 as u128,span,Some(IntKind::U8)).into_token()
     }
+  }
+}
+
+impl TokenExt for Char {
+  #[inline]
+  fn into_token(self)-> Token {
+    Token::Char(self)
+  }
+}
+
+impl Eq for Char {}
+impl PartialEq for Char {
+  fn eq(&self,other: &Char)-> bool {
+    self.repr==other.repr
   }
 }
 
@@ -70,15 +98,26 @@ impl PartialEq<u8> for Char {
   }
 }
 
+impl Debug for Char {
+  fn fmt(&self,f: &mut Formatter<'_>)-> fmt::Result {
+    if f.alternate() {
+      f.write_str(stringify!(Char))?;
+      return write!(f,"({:#?})",self.repr);
+    }
 
+    let mut dbg=f.debug_struct(stringify!(Char));
 
+    dbg.field("repr",&self.repr);
+    dbg.field("span",&self.span);
+    dbg.finish()
+  }
+}
 
-
-
-
-
-
-
+impl Hash for Char {
+  fn hash<H: Hasher>(&self,state: &mut H) {
+    self.repr.hash(state);
+  }
+}
 
 
 
@@ -114,6 +153,7 @@ impl CharKind {
     self.suffix().len()
   }
 }
+
 
 
 
