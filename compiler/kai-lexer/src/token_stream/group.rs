@@ -101,21 +101,31 @@ impl Debug for Group {
     // Nonempty brackets: [...]
     // Empty braces: { }
     // Nonempty braces: { ... }
-    let (open,close)=match self.delimiter {
-      Delimiter::Paren=> ("(",")"),
-      Delimiter::Brace=> ("{","}"),
-      Delimiter::Bracket=> ("[","]"),
-      Delimiter::None=> ("",""),
-    };
+    match self.delimiter {
+      Delimiter::Paren=> {
+        if self.stream.is_empty() {
+          return f.write_str("()");
+        }
 
-    f.write_str(open)?;
+        let mut dbg=f.debug_tuple("");
+        for entry in self.stream.inner.iter() {
+          dbg.field(entry);
+        }
 
-    Debug::fmt(&self.stream,f)?;
-    if self.delimiter==Delimiter::Brace && !self.stream.inner.is_empty() {
-      f.write_str(" ")?;
+        dbg.finish()
+      },
+      Delimiter::Brace=> {
+        f.debug_set()
+        .entries(self.stream.inner.iter())
+        .finish()
+      }
+      Delimiter::Bracket=> {
+        f.debug_list()
+        .entries(self.stream.inner.iter())
+        .finish()
+      }
+      Delimiter::None=> Debug::fmt(&self.stream,f)
     }
-
-    f.write_str(close)
   }
 }
 

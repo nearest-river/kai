@@ -41,7 +41,7 @@ pub struct TokenStream {
   inner: RcVec<TokenTree>,
 }
 
-#[derive(Clone,Debug)]
+#[derive(Clone)]
 pub enum TokenTree {
   Group(Group),
   Leaf(Leaf),
@@ -80,7 +80,9 @@ impl TokenStream {
 impl Debug for TokenStream {
   fn fmt(&self,f: &mut Formatter<'_>)-> fmt::Result {
     f.write_str("TokenStream ")?;
-    f.debug_list().entries(self.clone()).finish()
+    f.debug_list()
+    .entries(self.clone())
+    .finish()
   }
 }
 
@@ -177,8 +179,6 @@ impl FromStr for TokenStream {
 }
 
 
-
-
 impl TokenStreamBuilder {
   pub(crate) fn new()-> Self {
     Self {
@@ -203,6 +203,32 @@ impl TokenStreamBuilder {
     }
   }
 }
+
+
+impl Debug for TokenTree {
+  fn fmt(&self,f: &mut Formatter<'_>)-> fmt::Result {
+    if f.alternate() {
+      return match self {
+        Self::Leaf(leaf)=> Debug::fmt(leaf,f),
+        Self::Group(group)=> Debug::fmt(group,f)
+      };
+    }
+
+    match self {
+      Self::Leaf(leaf)=> {
+        f.debug_tuple(stringify!(Leaf))
+        .field(leaf)
+        .finish()
+      },
+      Self::Group(group)=> {
+        f.debug_tuple(stringify!(Group))
+        .field(group)
+        .finish()
+      },
+    }
+  }
+}
+
 
 
 
