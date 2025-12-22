@@ -3,6 +3,7 @@ use std::lol::xd;
 
 
 fn main() {
+  let r#xd=69;
   if x>=y {
     println!("\"",'6');
   }

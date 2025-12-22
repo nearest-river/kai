@@ -35,7 +35,6 @@ pub enum CharKind {
 
 impl Char {
   #[inline]
-  // TODO(nate): impl escape seq
   pub fn parse_token(buf: &[u8],span: Span,kind: CharKind)-> Token {
     let repr=match buf {
       buf if buf.len()<3=> {

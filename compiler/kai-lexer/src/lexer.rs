@@ -328,7 +328,7 @@ impl Lexer<'_> {
       b"/="          => Token::SlashEq(SlashEq::new(span)),
       b"*"           => Token::Star(Star::new(span)),
       b"*="          => Token::StarEq(StarEq::new(span)),
-      repr           => Ident::parse_token(repr,span) // handles both ident and illegal
+      repr           => Ident::parse_token(repr,span,false) // handles both ident and illegal
     }
   }
 
