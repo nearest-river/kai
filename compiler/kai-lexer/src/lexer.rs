@@ -40,7 +40,6 @@ impl<'b> Lexer<'b> {
   #[inline(always)]
   const fn update(&mut self,count: usize) {
     self.cursor+=count;
-    // TODO(nate): update line and bol if new line is reached.
   }
 
   #[inline(always)]
@@ -377,9 +376,18 @@ impl Lexer<'_> {
 
   #[inline]
   const fn skip_whitespaces(&mut self) {
-    while !self.is_eof() && self.buf[self.cursor].is_ascii_whitespace() {
-      self.update(1);
+    let mut i=self.cursor;
+    while i<self.buf.len() {
+      match self.buf[i] {
+        b'\n'|b'\r' if i+1<self.buf.len()=> self.bol=i+1,
+        b'\n'|b'\r'|b'\t'|b'\x0C'| b' '=> (),
+        _=> break,
+      }
+
+      i+=1;
     }
+
+    self.update(i-self.cursor);
   }
 }
 
