@@ -13,6 +13,7 @@ use crate::{
 use tracker::{
   LexTracker,
   NumberLexTracker,
+  RIdentLexTracker,
   CommentLexTracker,
   StringCharLexTracker,
 };
@@ -105,6 +106,12 @@ impl Iterator for Lexer<'_> {
       TokenHint::Char(kind)=> Char::parse_token(token,span,kind),
       TokenHint::Comment(kind)=> Comment::new(token,span,kind).into_token(),
       TokenHint::Illegal(reason)=> Illegal::new(token,span,reason).into_token(),
+      TokenHint::RIdent=> {
+        // SAFETY: it's unrecheable
+        // since `Utf8Error` would've returned a Illegal varient
+        let token=unsafe { str::from_utf8_unchecked(token) };
+        Ident::new_unchecked(token,span,true).into_token()
+      },
     };
 
     Some(token)
@@ -156,6 +163,17 @@ impl Lexer<'_> {
                   let Some(hint)=str_ch_tracker.sec_ends(&self.buf[i..]) {
           return (i+str_ch_tracker.suffix_len(),hint);
         }
+
+        if let None=&tracker && let Some(rident_tracker)=RIdentLexTracker::seq_start(&self.buf[i..]) {
+          let prefix_len=rident_tracker.prefix_len();
+          tracker=Some(LexTracker::RIdent(rident_tracker));
+          i+=prefix_len;
+          continue;
+        } else if let Some(LexTracker::RIdent(rident_tracker))=&mut tracker &&
+                  let Some(hint)=rident_tracker.seq_ends(&self.buf[i..]) {
+          return (i+hint.suffix_size_hint().unwrap_or_default(),hint);
+        }
+
 
         if let None=&tracker {
           tracker=Some(LexTracker::Other);

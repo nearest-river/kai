@@ -21,6 +21,7 @@ pub enum TokenHint {
   Char(CharKind),
   Comment(CommentKind),
   Illegal(Option<Reason>),
+  RIdent,
   Other,
 }
 
@@ -34,7 +35,12 @@ impl TokenHint {
       Self::Float(Some(kind))=> Some(kind.suffix_len()),
       Self::Int(Some(kind))=> Some(kind.suffix_len()),
       Self::Comment(kind)=> Some(kind.suffix_len()),
-      _=> return None,
+      Self::Str(kind)=> Some(kind.suffix_len()),
+      Self::Char(kind)=> Some(kind.suffix_len()),
+      Self::Int(None)|Self::Float(None)=> None,
+      Self::RIdent=> None,
+      Self::Illegal(_)=> None,
+      Self::Other=> None,
     }
   }
 }

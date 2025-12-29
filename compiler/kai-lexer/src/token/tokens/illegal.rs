@@ -1,4 +1,6 @@
 
+use std::str::Utf8Error;
+
 use crate::{
   prelude::*,
   error::LiteralParseErr,
@@ -17,6 +19,7 @@ pub struct Illegal {
 pub enum Reason {
   ParseCommentErr(&'static str),
   ParseLiteralErr(LiteralParseErr),
+  Utf8Error(Utf8Error),
   Other(Box<str>),
 }
 

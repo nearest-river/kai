@@ -16,6 +16,7 @@ pub(crate) use string_char::*;
 
 pub enum LexTracker {
   Num(NumberLexTracker),
+  RIdent(RIdentLexTracker),
   StrChar(StringCharLexTracker),
   Other,
 }
