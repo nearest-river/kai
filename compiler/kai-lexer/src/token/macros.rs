@@ -57,7 +57,7 @@ macro_rules! TokenTy {
   [..]          => { $crate::token::DotDot };
   [...]         => { $crate::token::DotDotDot };
   [..=]         => { $crate::token::DotDotEq };
-  [=]           => { $crate::token::Eq };
+  [=]           => { $crate::token::Equal };
   [==]          => { $crate::token::EqEq };
   [=>]          => { $crate::token::FatArrow };
   [>=]          => { $crate::token::Ge };
