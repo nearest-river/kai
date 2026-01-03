@@ -6,6 +6,8 @@ members = [
   "compiler/kaic",
   "compiler/kai-lexer",
   "compiler/kai-lexer-macro",
+  "compiler/kai-ast",
+  "compiler/kai-ast-macro",
 ]
 
 

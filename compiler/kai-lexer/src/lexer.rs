@@ -259,6 +259,7 @@ impl Lexer<'_> {
       b"as"          => Token::As(As::new(span)),
       b"async"       => Token::Async(Async::new(span)),
       b"await"       => Token::Await(Await::new(span)),
+      b"auto"        => Token::Auto(Auto::new(span)),
       b"break"       => Token::Break(Break::new(span)),
       b"const"       => Token::Const(Const::new(span)),
       b"continue"    => Token::Continue(Continue::new(span)),
@@ -398,7 +399,7 @@ impl Lexer<'_> {
     while i<self.buf.len() {
       match self.buf[i] {
         b'\n'|b'\r' if i+1<self.buf.len()=> self.bol=i+1,
-        b'\n'|b'\r'|b'\t'|b'\x0C'| b' '=> (),
+        b'\n'|b'\r'|b'\t'|b'\x0C'|b' '=> (),
         _=> break,
       }
 

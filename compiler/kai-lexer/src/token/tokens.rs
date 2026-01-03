@@ -42,6 +42,7 @@ define_delimitirs! {
 define_keywords! {
   "as"          pub struct As
   "async"       pub struct Async
+  "auto"        pub struct Auto
   "await"       pub struct Await
   "break"       pub struct Break
   "const"       pub struct Const

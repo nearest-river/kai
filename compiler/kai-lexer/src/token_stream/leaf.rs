@@ -75,6 +75,7 @@ pub enum Leaf {
 
   // keywords
   As(As),
+  Auto(Auto),
   In(In),
   Fn(Fn),
   Struct(Struct),
@@ -131,6 +132,7 @@ impl From<Token> for Option<Leaf> {
   #[inline]
   fn from(token: Token)-> Option<Leaf> {
     let leaf=match token {
+      Token::Auto(token)=> Leaf::Auto(token),
       Token::Ident(token)=> Leaf::Ident(token),
       Token::Comment(token)=> Leaf::Comment(token),
       Token::Illegal(token)=> Leaf::Illegal(token),
@@ -239,6 +241,7 @@ impl Into<Token> for Leaf {
   #[inline]
   fn into(self)-> Token {
     match self {
+      Leaf::Auto(token)=> Token::Auto(token),
       Leaf::Ident(token)=> Token::Ident(token),
       Leaf::Comment(token)=> Token::Comment(token),
       Leaf::Illegal(token)=> Token::Illegal(token),

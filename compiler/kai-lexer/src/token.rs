@@ -105,6 +105,7 @@ pub enum Token {
   Enum(Enum),
   Impl(Impl),
   Trait(Trait),
+  Auto(Auto),
   Async(Async),
   Type(Type),
   Extern(Extern),
