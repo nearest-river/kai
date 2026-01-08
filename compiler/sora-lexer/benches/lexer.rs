@@ -1,6 +1,6 @@
 
 use std::fs;
-use kai_lexer::Lexer;
+use sora_lexer::Lexer;
 
 use criterion::{
   Criterion,

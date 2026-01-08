@@ -3,11 +3,11 @@
 [workspace]
 resolver = "3"
 members = [
-  "compiler/kaic",
-  "compiler/kai-lexer",
-  "compiler/kai-lexer-macro",
-  "compiler/kai-ast",
-  "compiler/kai-ast-macro",
+  "compiler/sorac",
+  "compiler/sora-lexer",
+  "compiler/sora-lexer-macro",
+  "compiler/sora-ast",
+  "compiler/sora-ast-macro",
 ]
 
 

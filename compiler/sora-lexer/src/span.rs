@@ -37,7 +37,7 @@ thread_local! {
 
 
 
-#[derive(Debug,Clone,Copy,PartialEq,Eq)]
+#[derive(Debug,Clone,Copy,PartialEq,Eq,Default)]
 pub struct Span {
   pub(crate) lo: u32,
   pub(crate) hi: u32,

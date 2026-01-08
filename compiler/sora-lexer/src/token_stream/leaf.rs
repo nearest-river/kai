@@ -3,7 +3,7 @@ use crate::token::*;
 
 
 // This thing is a zero-cost abstarction.
-#[kai_lexer_macro::impl_token_debug]
+#[sora_lexer_macro::impl_token_debug]
 #[derive(Clone)]
 pub enum Leaf {
   // wtf?

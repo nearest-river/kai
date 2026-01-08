@@ -17,7 +17,7 @@ pub trait TokenExt {
 
 
 
-#[kai_lexer_macro::impl_token_debug]
+#[sora_lexer_macro::impl_token_debug]
 #[derive(Clone)]
 pub enum Token {
   // wtf?

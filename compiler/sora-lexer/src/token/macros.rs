@@ -1,95 +1,95 @@
 
 #[macro_export]
 macro_rules! TokenTy {
-  [as]          => { $crate::token::As };
-  [async]       => { $crate::token::Async };
-  [await]       => { $crate::token::Await };
-  [break]       => { $crate::token::Break };
-  [const]       => { $crate::token::Const };
-  [continue]    => { $crate::token::Continue };
-  [this]        => { $crate::token::This };
-  [default]     => { $crate::token::Default };
-  [dyn]         => { $crate::token::Dyn };
-  [else]        => { $crate::token::Else };
-  [enum]        => { $crate::token::Enum };
-  [extern]      => { $crate::token::Extern };
-  [fn]          => { $crate::token::Fn };
-  [for]         => { $crate::token::For };
-  [if]          => { $crate::token::If };
-  [impl]        => { $crate::token::Impl };
-  [in]          => { $crate::token::In };
-  [let]         => { $crate::token::Let };
-  [loop]        => { $crate::token::Loop };
-  [macro]       => { $crate::token::Macro };
-  [match]       => { $crate::token::Match };
-  [mod]         => { $crate::token::Mod };
-  [move]        => { $crate::token::Move };
-  [mut]         => { $crate::token::Mut };
-  [pub]         => { $crate::token::Pub };
-  [raw]         => { $crate::token::Raw };
-  [ref]         => { $crate::token::Ref };
-  [return]      => { $crate::token::Return };
-  [Self]        => { $crate::token::SelfType };
-  [self]        => { $crate::token::SelfValue };
-  [static]      => { $crate::token::Static };
-  [struct]      => { $crate::token::Struct };
-  [super]       => { $crate::token::Super };
-  [trait]       => { $crate::token::Trait };
-  [type]        => { $crate::token::Type };
-  [typeof]      => { $crate::token::Typeof };
-  [union]       => { $crate::token::Union };
-  [unsafe]      => { $crate::token::Unsafe };
-  [use]         => { $crate::token::Use };
-  [where]       => { $crate::token::Where };
-  [while]       => { $crate::token::While };
-  [yeet]        => { $crate::token::Yeet };
-  [yield]       => { $crate::token::Yield };
-  [&]           => { $crate::token::And };
-  [&&]          => { $crate::token::AndAnd };
-  [&=]          => { $crate::token::AndEq };
-  [@]           => { $crate::token::At }; // ill have to think about it.
-  [^]           => { $crate::token::Caret };
-  [^=]          => { $crate::token::CaretEq };
-  [:]           => { $crate::token::Colon };
-  [,]           => { $crate::token::Comma };
-  [$]           => { $crate::token::Dollar };
-  [.]           => { $crate::token::Dot };
-  [..]          => { $crate::token::DotDot };
-  [...]         => { $crate::token::DotDotDot };
-  [..=]         => { $crate::token::DotDotEq };
-  [=]           => { $crate::token::Equal };
-  [==]          => { $crate::token::EqEq };
-  [=>]          => { $crate::token::FatArrow };
-  [>=]          => { $crate::token::Ge };
-  [>]           => { $crate::token::Gt };
-  [<-]          => { $crate::token::LArrow };
-  [<=]          => { $crate::token::Le };
-  [<]           => { $crate::token::Lt };
-  [-]           => { $crate::token::Minus };
-  [-=]          => { $crate::token::MinusEq };
-  [!=]          => { $crate::token::Ne };
-  [!]           => { $crate::token::Not };
-  [|]           => { $crate::token::Or };
-  [|=]          => { $crate::token::OrEq };
-  [||]          => { $crate::token::OrOr };
-  [::]          => { $crate::token::PathSep };
-  [%]           => { $crate::token::Percent };
-  [%=]          => { $crate::token::PercentEq };
-  [+]           => { $crate::token::Plus };
-  [+=]          => { $crate::token::PlusEq };
-  [#]           => { $crate::token::Pound };
-  [?]           => { $crate::token::Question };
-  [->]          => { $crate::token::RArrow };
-  [;]           => { $crate::token::SemiColon };
-  [<<]          => { $crate::token::Shl };
-  [<<=]         => { $crate::token::ShlEq };
-  [>>]          => { $crate::token::Shr };
-  [>>=]         => { $crate::token::ShrEq };
-  [/]           => { $crate::token::Slash };
-  [/=]          => { $crate::token::SlashEq };
-  [*]           => { $crate::token::Star };
-  [*=]          => { $crate::token::StarEq };
-  [_]           => { $crate::token::Underscore };
+  [as]          => { $crate::token::tokens::As };
+  [async]       => { $crate::token::tokens::Async };
+  [await]       => { $crate::token::tokens::Await };
+  [break]       => { $crate::token::tokens::Break };
+  [const]       => { $crate::token::tokens::Const };
+  [continue]    => { $crate::token::tokens::Continue };
+  [this]        => { $crate::token::tokens::This };
+  [default]     => { $crate::token::tokens::Default };
+  [dyn]         => { $crate::token::tokens::Dyn };
+  [else]        => { $crate::token::tokens::Else };
+  [enum]        => { $crate::token::tokens::Enum };
+  [extern]      => { $crate::token::tokens::Extern };
+  [fn]          => { $crate::token::tokens::Fn };
+  [for]         => { $crate::token::tokens::For };
+  [if]          => { $crate::token::tokens::If };
+  [impl]        => { $crate::token::tokens::Impl };
+  [in]          => { $crate::token::tokens::In };
+  [let]         => { $crate::token::tokens::Let };
+  [loop]        => { $crate::token::tokens::Loop };
+  [macro]       => { $crate::token::tokens::Macro };
+  [match]       => { $crate::token::tokens::Match };
+  [mod]         => { $crate::token::tokens::Mod };
+  [move]        => { $crate::token::tokens::Move };
+  [mut]         => { $crate::token::tokens::Mut };
+  [pub]         => { $crate::token::tokens::Pub };
+  [raw]         => { $crate::token::tokens::Raw };
+  [ref]         => { $crate::token::tokens::Ref };
+  [return]      => { $crate::token::tokens::Return };
+  [Self]        => { $crate::token::tokens::SelfType };
+  [self]        => { $crate::token::tokens::SelfValue };
+  [static]      => { $crate::token::tokens::Static };
+  [struct]      => { $crate::token::tokens::Struct };
+  [super]       => { $crate::token::tokens::Super };
+  [trait]       => { $crate::token::tokens::Trait };
+  [type]        => { $crate::token::tokens::Type };
+  [typeof]      => { $crate::token::tokens::Typeof };
+  [union]       => { $crate::token::tokens::Union };
+  [unsafe]      => { $crate::token::tokens::Unsafe };
+  [use]         => { $crate::token::tokens::Use };
+  [where]       => { $crate::token::tokens::Where };
+  [while]       => { $crate::token::tokens::While };
+  [yeet]        => { $crate::token::tokens::Yeet };
+  [yield]       => { $crate::token::tokens::Yield };
+  [&]           => { $crate::token::tokens::And };
+  [&&]          => { $crate::token::tokens::AndAnd };
+  [&=]          => { $crate::token::tokens::AndEq };
+  [@]           => { $crate::token::tokens::At }; // ill have to think about it.
+  [^]           => { $crate::token::tokens::Caret };
+  [^=]          => { $crate::token::tokens::CaretEq };
+  [:]           => { $crate::token::tokens::Colon };
+  [,]           => { $crate::token::tokens::Comma };
+  [$]           => { $crate::token::tokens::Dollar };
+  [.]           => { $crate::token::tokens::Dot };
+  [..]          => { $crate::token::tokens::DotDot };
+  [...]         => { $crate::token::tokens::DotDotDot };
+  [..=]         => { $crate::token::tokens::DotDotEq };
+  [=]           => { $crate::token::tokens::Equal };
+  [==]          => { $crate::token::tokens::EqualEqual };
+  [=>]          => { $crate::token::tokens::FatArrow };
+  [>=]          => { $crate::token::tokens::Ge };
+  [>]           => { $crate::token::tokens::Gt };
+  [<-]          => { $crate::token::tokens::LArrow };
+  [<=]          => { $crate::token::tokens::Le };
+  [<]           => { $crate::token::tokens::Lt };
+  [-]           => { $crate::token::tokens::Minus };
+  [-=]          => { $crate::token::tokens::MinusEq };
+  [!=]          => { $crate::token::tokens::NotEq };
+  [!]           => { $crate::token::tokens::Not };
+  [|]           => { $crate::token::tokens::Or };
+  [|=]          => { $crate::token::tokens::OrEq };
+  [||]          => { $crate::token::tokens::OrOr };
+  [::]          => { $crate::token::tokens::PathSep };
+  [%]           => { $crate::token::tokens::Percent };
+  [%=]          => { $crate::token::tokens::PercentEq };
+  [+]           => { $crate::token::tokens::Plus };
+  [+=]          => { $crate::token::tokens::PlusEq };
+  [#]           => { $crate::token::tokens::Pound };
+  [?]           => { $crate::token::tokens::Question };
+  [->]          => { $crate::token::tokens::RArrow };
+  [;]           => { $crate::token::tokens::SemiColon };
+  [<<]          => { $crate::token::tokens::Shl };
+  [<<=]         => { $crate::token::tokens::ShlEq };
+  [>>]          => { $crate::token::tokens::Shr };
+  [>>=]         => { $crate::token::tokens::ShrEq };
+  [/]           => { $crate::token::tokens::Slash };
+  [/=]          => { $crate::token::tokens::SlashEq };
+  [*]           => { $crate::token::tokens::Star };
+  [*=]          => { $crate::token::tokens::StarEq };
+  [_]           => { $crate::token::tokens::Underscore };
 }
 
 
@@ -245,6 +245,12 @@ macro_rules! define_keywords {
     pub struct $name {
       pub span: Span,
       _marker: $crate::marker::ProcMacroAutoTraits,
+    }
+
+    impl std::default::Default for $name {
+      fn default()-> Self {
+        Self::new(Span::default())
+      }
     }
 
     impl $name {

@@ -1,5 +1,5 @@
 [package]
-name = "kai-lexer-macro"
+name = "sora-lexer-macro"
 version = "0.1.0"
 edition = "2024"
 
