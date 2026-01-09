@@ -2,9 +2,11 @@
 #[macro_export]
 macro_rules! TokenTy {
   [as]          => { $crate::token::tokens::As };
+  [auto]        => { $crate::token::tokens::Auto };
   [async]       => { $crate::token::tokens::Async };
   [await]       => { $crate::token::tokens::Await };
   [break]       => { $crate::token::tokens::Break };
+  [crate]       => { $crate::token::tokens::Crate };
   [const]       => { $crate::token::tokens::Const };
   [continue]    => { $crate::token::tokens::Continue };
   [this]        => { $crate::token::tokens::This };

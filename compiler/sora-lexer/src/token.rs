@@ -36,7 +36,7 @@ pub enum Token {
   // Eof,
   Unsafe(Unsafe),
   Super(Super),
-  This(This),
+  Crate(Crate),
 
   // Punctuations
   At(At),

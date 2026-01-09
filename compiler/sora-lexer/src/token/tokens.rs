@@ -47,7 +47,7 @@ define_keywords! {
   "break"       pub struct Break
   "const"       pub struct Const
   "continue"    pub struct Continue
-  "this"        pub struct This
+  "crate"       pub struct Crate
   "default"     pub struct Default
   "dyn"         pub struct Dyn
   "else"        pub struct Else

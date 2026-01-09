@@ -12,11 +12,11 @@ use std::{
 
 
 pub struct RcVec<T> {
-  inner: Rc<Vec<T>>,
+  pub(crate) inner: Rc<Vec<T>>,
 }
 
 pub struct RcVecBuilder<T> {
-  inner: Vec<T>,
+  pub(crate) inner: Vec<T>,
 }
 
 pub struct RcVecMut<'a,T> {

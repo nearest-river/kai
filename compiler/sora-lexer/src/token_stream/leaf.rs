@@ -22,7 +22,7 @@ pub enum Leaf {
   // Eof,
   Unsafe(Unsafe),
   Super(Super),
-  This(This),
+  Crate(Crate),
 
   // Punctuations
   At(At),
@@ -143,7 +143,7 @@ impl From<Token> for Option<Leaf> {
       Token::Int(token)=> Leaf::Int(token),
       Token::Unsafe(token)=> Leaf::Unsafe(token),
       Token::Super(token)=> Leaf::Super(token),
-      Token::This(token)=> Leaf::This(token),
+      Token::Crate(token)=> Leaf::Crate(token),
       Token::At(token)=> Leaf::At(token),
       Token::And(token)=> Leaf::And(token),
       Token::AndAnd(token)=> Leaf::AndAnd(token),
@@ -252,7 +252,7 @@ impl Into<Token> for Leaf {
       Leaf::Int(token)=> Token::Int(token),
       Leaf::Unsafe(token)=> Token::Unsafe(token),
       Leaf::Super(token)=> Token::Super(token),
-      Leaf::This(token)=> Token::This(token),
+      Leaf::Crate(token)=> Token::Crate(token),
       Leaf::At(token)=> Token::At(token),
       Leaf::And(token)=> Token::And(token),
       Leaf::AndAnd(token)=> Token::AndAnd(token),

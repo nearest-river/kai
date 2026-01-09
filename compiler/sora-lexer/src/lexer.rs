@@ -263,7 +263,7 @@ impl Lexer<'_> {
       b"break"       => Token::Break(Break::new(span)),
       b"const"       => Token::Const(Const::new(span)),
       b"continue"    => Token::Continue(Continue::new(span)),
-      b"this"        => Token::This(This::new(span)),
+      b"crate"       => Token::Crate(Crate::new(span)),
       b"default"     => Token::Default(Default::new(span)),
       b"dyn"         => Token::Dyn(Dyn::new(span)),
       b"else"        => Token::Else(Else::new(span)),

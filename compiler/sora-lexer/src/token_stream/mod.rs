@@ -55,20 +55,29 @@ pub(crate) struct TokenStreamBuilder {
 pub(crate) type TokenTreeIter=RcVecIntoIter<TokenTree>;
 
 impl TokenStream {
+  #[inline]
   pub(crate) fn new()-> Self {
     TokenStream {
       inner: RcVecBuilder::new().build()
     }
   }
 
+  #[inline]
   pub fn parse(buf: &[u8])-> Result<Self,LexErr> {
     parse::parse(Lexer::new(buf))
   }
 
+  #[inline]
   pub fn is_empty(&self)-> bool {
     self.inner.is_empty()
   }
 
+  #[inline]
+  pub fn peek(&self,idx: usize)-> Option<&TokenTree> {
+    self.inner.inner.get(idx)
+  }
+
+  #[inline]
   fn take_inner(self)-> RcVecBuilder<TokenTree> {
     let nodrop=ManuallyDrop::new(self);
     unsafe {
@@ -76,6 +85,7 @@ impl TokenStream {
     }.make_owned()
   }
 }
+
 
 impl Debug for TokenStream {
   fn fmt(&self,f: &mut Formatter<'_>)-> fmt::Result {
