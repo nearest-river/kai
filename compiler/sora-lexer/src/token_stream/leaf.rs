@@ -1,5 +1,8 @@
 
-use crate::token::*;
+use crate::{
+  Span,
+  token::*,
+};
 
 
 // This thing is a zero-cost abstarction.
@@ -342,6 +345,146 @@ impl Into<Token> for Leaf {
     }
   }
 }
+
+macro_rules! leaf_match_all {
+  ($tok:expr,$token:ident-> $f:expr)=> {
+    match $tok {
+      Leaf::Ident($token)=> $f,
+      Leaf::Comment($token)=> $f,
+      Leaf::Illegal($token)=> $f,
+      Leaf::Str($token)=> $f,
+      Leaf::Char($token)=> $f,
+      Leaf::Bool($token)=> $f,
+      Leaf::Float($token)=> $f,
+      Leaf::Int($token)=> $f,
+      Leaf::Unsafe($token)=> $f,
+      Leaf::Super($token)=> $f,
+      Leaf::Crate($token)=> $f,
+      Leaf::At($token)=> $f,
+      Leaf::And($token)=> $f,
+      Leaf::AndAnd($token)=> $f,
+      Leaf::AndEq($token)=> $f,
+      Leaf::Caret($token)=> $f,
+      Leaf::CaretEq($token)=> $f,
+      Leaf::Colon($token)=> $f,
+      Leaf::Comma($token)=> $f,
+      Leaf::Dollar($token)=> $f,
+      Leaf::Dot($token)=> $f,
+      Leaf::DotDot($token)=> $f,
+      Leaf::DotDotDot($token)=> $f,
+      Leaf::DotDotEq($token)=> $f,
+      Leaf::Equal($token)=> $f,
+      Leaf::EqualEqual($token)=> $f,
+      Leaf::FatArrow($token)=> $f,
+      Leaf::Ge($token)=> $f,
+      Leaf::Gt($token)=> $f,
+      Leaf::Le($token)=> $f,
+      Leaf::Lt($token)=> $f,
+      Leaf::LArrow($token)=> $f,
+      Leaf::Minus($token)=> $f,
+      Leaf::MinusEq($token)=> $f,
+      Leaf::NotEq($token)=> $f,
+      Leaf::Not($token)=> $f,
+      Leaf::Or($token)=> $f,
+      Leaf::OrEq($token)=> $f,
+      Leaf::OrOr($token)=> $f,
+      Leaf::PathSep($token)=> $f,
+      Leaf::Percent($token)=> $f,
+      Leaf::PercentEq($token)=> $f,
+      Leaf::Plus($token)=> $f,
+      Leaf::PlusEq($token)=> $f,
+      Leaf::Pound($token)=> $f,
+      Leaf::Question($token)=> $f,
+      Leaf::RArrow($token)=> $f,
+      Leaf::SemiColon($token)=> $f,
+      Leaf::Shl($token)=> $f,
+      Leaf::Shr($token)=> $f,
+      Leaf::ShlEq($token)=> $f,
+      Leaf::ShrEq($token)=> $f,
+      Leaf::Slash($token)=> $f,
+      Leaf::SlashEq($token)=> $f,
+      Leaf::Star($token)=> $f,
+      Leaf::StarEq($token)=> $f,
+      Leaf::Underscore($token)=> $f,
+      Leaf::As($token)=> $f,
+      Leaf::In($token)=> $f,
+      Leaf::Fn($token)=> $f,
+      Leaf::Struct($token)=> $f,
+      Leaf::Const($token)=> $f,
+      Leaf::Let($token)=> $f,
+      Leaf::Static($token)=> $f,
+      Leaf::Enum($token)=> $f,
+      Leaf::Impl($token)=> $f,
+      Leaf::Trait($token)=> $f,
+      Leaf::Auto($token)=> $f,
+      Leaf::Async($token)=> $f,
+      Leaf::Type($token)=> $f,
+      Leaf::Extern($token)=> $f,
+      Leaf::Mod($token)=> $f,
+      Leaf::Use($token)=> $f,
+      Leaf::Default($token)=> $f,
+      Leaf::Dyn($token)=> $f,
+      Leaf::Ref($token)=> $f,
+      Leaf::Pub($token)=> $f,
+      Leaf::Break($token)=> $f,
+      Leaf::Continue($token)=> $f,
+      Leaf::Return($token)=> $f,
+      Leaf::Yeet($token)=> $f,
+      Leaf::Await($token)=> $f,
+      Leaf::If($token)=> $f,
+      Leaf::Else($token)=> $f,
+      Leaf::Match($token)=> $f,
+      Leaf::While($token)=> $f,
+      Leaf::For($token)=> $f,
+      Leaf::Loop($token)=> $f,
+      Leaf::Macro($token)=> $f,
+      Leaf::Move($token)=> $f,
+      Leaf::Mut($token)=> $f,
+      Leaf::Raw($token)=> $f,
+      Leaf::SelfType($token)=> $f,
+      Leaf::SelfValue($token)=> $f,
+      Leaf::Typeof($token)=> $f,
+      Leaf::Union($token)=> $f,
+      Leaf::Where($token)=> $f,
+      Leaf::Yield($token)=> $f,
+    }
+  };
+}
+
+impl Leaf {
+  #[inline]
+  pub fn span(&self)-> Span {
+    leaf_match_all!(self,token-> token.span())
+  }
+
+  #[inline]
+  pub fn span_open(&self)-> Span {
+    self.span().first_byte()
+  }
+
+  #[inline]
+  pub fn span_close(&self)-> Span {
+    self.span().last_byte()
+  }
+
+  #[inline]
+  pub fn set_span(&mut self,span: Span) {
+    leaf_match_all!(self,token-> token.span=span);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

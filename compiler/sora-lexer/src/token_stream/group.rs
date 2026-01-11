@@ -64,18 +64,22 @@ impl Group {
     self.stream.clone()
   }
 
+  #[inline]
   pub fn span(&self)-> Span {
     self.span
   }
 
+  #[inline]
   pub fn span_open(&self)-> Span {
     self.span.first_byte()
   }
 
+  #[inline]
   pub fn span_close(&self)-> Span {
     self.span.last_byte()
   }
 
+  #[inline]
   pub fn set_span(&mut self,span: Span) {
     self.span=span;
   }

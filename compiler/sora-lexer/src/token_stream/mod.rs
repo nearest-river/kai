@@ -91,6 +91,15 @@ impl TokenStream {
   }
 }
 
+impl TokenTree {
+  #[inline(always)]
+  pub fn span(&self)-> Span {
+    match self {
+      Self::Leaf(leaf)=> leaf.span(),
+      Self::Group(group)=> group.span(),
+    }
+  }
+}
 
 impl Debug for TokenStream {
   fn fmt(&self,f: &mut Formatter<'_>)-> fmt::Result {
