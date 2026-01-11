@@ -78,6 +78,11 @@ impl TokenStream {
   }
 
   #[inline]
+  pub fn len(&self)-> usize {
+    self.inner.len()
+  }
+
+  #[inline]
   fn take_inner(self)-> RcVecBuilder<TokenTree> {
     let nodrop=ManuallyDrop::new(self);
     unsafe {

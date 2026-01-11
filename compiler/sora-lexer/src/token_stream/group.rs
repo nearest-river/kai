@@ -79,6 +79,10 @@ impl Group {
   pub fn set_span(&mut self,span: Span) {
     self.span=span;
   }
+
+  pub fn into_stream(self)-> TokenStream {
+    self.stream
+  }
 }
 
 
