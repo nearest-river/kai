@@ -3,6 +3,7 @@
 mod macros;
 pub mod tokens;
 
+use crate::Span;
 pub(crate) use tokens::*;
 
 
@@ -12,6 +13,18 @@ pub(crate) use tokens::*;
 
 pub trait TokenExt {
   fn into_token(self)-> Token;
+  fn span(&self)-> Span;
+  fn set_span(&mut self,span: Span);
+
+  #[inline(always)]
+  fn span_open(&self)-> Span {
+    self.span().first_byte()
+  }
+
+  #[inline(always)]
+  fn span_close(&self)-> Span {
+    self.span().last_byte()
+  }
 }
 
 

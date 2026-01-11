@@ -89,6 +89,16 @@ impl TokenExt for Float {
   fn into_token(self)-> Token {
     Token::Float(self)
   }
+
+  #[inline]
+  fn span(&self)-> Span {
+    self.span
+  }
+
+  #[inline]
+  fn set_span(&mut self,span: Span) {
+    self.span=span
+  }
 }
 
 impl Debug for Float {

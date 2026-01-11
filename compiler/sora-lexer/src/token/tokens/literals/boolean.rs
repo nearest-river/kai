@@ -30,6 +30,16 @@ impl TokenExt for Bool {
   fn into_token(self)-> Token {
     Token::Bool(self)
   }
+
+  #[inline]
+  fn span(&self)-> Span {
+    self.span
+  }
+
+  #[inline]
+  fn set_span(&mut self,span: Span) {
+    self.span=span
+  }
 }
 
 impl Eq for Bool {}

@@ -76,6 +76,16 @@ impl TokenExt for Char {
   fn into_token(self)-> Token {
     Token::Char(self)
   }
+
+  #[inline]
+  fn span(&self)-> Span {
+    self.span
+  }
+
+  #[inline]
+  fn set_span(&mut self,span: Span) {
+    self.span=span
+  }
 }
 
 impl Eq for Char {}

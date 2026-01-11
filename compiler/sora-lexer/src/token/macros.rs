@@ -133,6 +133,16 @@ macro_rules! impl_repr_tokens {
       fn into_token(self)-> $crate::token::Token {
         $crate::token::Token::$name(self)
       }
+
+      #[inline]
+      fn span(&self)-> $crate::Span {
+        self.span
+      }
+
+      #[inline]
+      fn set_span(&mut self,span: $crate::Span) {
+        self.span=span;
+      }
     }
     )*
   };
@@ -180,6 +190,16 @@ macro_rules! define_delimitirs {
     impl $crate::token::TokenExt for $name {
       fn into_token(self)-> $crate::token::Token {
         $crate::token::Token::$name(self)
+      }
+
+      #[inline]
+      fn span(&self)-> $crate::Span {
+        self.span
+      }
+
+      #[inline]
+      fn set_span(&mut self,span: $crate::Span) {
+        self.span=span;
       }
     }
     )*
@@ -233,6 +253,16 @@ macro_rules! define_punctuation {
       fn into_token(self)-> $crate::token::Token {
         $crate::token::Token::$name(self)
       }
+
+      #[inline]
+      fn span(&self)-> $crate::Span {
+        self.span
+      }
+
+      #[inline]
+      fn set_span(&mut self,span: $crate::Span) {
+        self.span=span;
+      }
     }
     )*
   };
@@ -285,6 +315,16 @@ macro_rules! define_keywords {
       fn into_token(self)-> $crate::token::Token {
         $crate::token::Token::$name(self)
       }
+
+      #[inline]
+      fn span(&self)-> $crate::Span {
+        self.span
+      }
+
+      #[inline]
+      fn set_span(&mut self,span: $crate::Span) {
+        self.span=span;
+      }
     }
     )*
   };
@@ -331,6 +371,16 @@ macro_rules! define_punctuation_structs {
     impl $crate::token::TokenExt for $name {
       fn into_token(self)-> $crate::token::Token {
         $crate::token::Token::$name(self)
+      }
+
+      #[inline]
+      fn span(&self)-> $crate::Span {
+        self.span
+      }
+
+      #[inline]
+      fn set_span(&mut self,span: $crate::Span) {
+        self.span=span;
       }
     }
     )*

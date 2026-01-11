@@ -112,6 +112,16 @@ impl TokenExt for Str {
   fn into_token(self)-> Token {
     Token::Str(self)
   }
+
+  #[inline]
+  fn span(&self)-> Span {
+    self.span
+  }
+
+  #[inline]
+  fn set_span(&mut self,span: Span) {
+    self.span=span
+  }
 }
 
 
