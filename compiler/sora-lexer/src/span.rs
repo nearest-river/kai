@@ -60,23 +60,15 @@ impl Span {
     }
   }
 
-  pub(crate) fn mixed_site()-> Self {
-    Self::call_site()
-  }
-
-  pub(crate) fn def_site()-> Self {
-    Self::call_site()
-  }
-
-  pub(crate) fn resolved_at(&self,_other: Span)-> Self {
+  pub fn resolved_at(&self,_other: Span)-> Self {
     *self
   }
 
-  pub(crate) fn located_at(&self,other: Span)-> Self {
+  pub fn located_at(&self,other: Span)-> Self {
     other
   }
 
-  pub(crate) fn byte_range(&self)-> Range<usize> {
+  pub fn byte_range(&self)-> Range<usize> {
     if self.is_call_site() {
       0..0
     } else {
@@ -88,7 +80,7 @@ impl Span {
     }
   }
 
-  pub(crate) fn start(&self)-> LineColumn {
+  pub fn start(&self)-> LineColumn {
     SOURCE_MAP.with(|sm| {
       let sm=sm.borrow();
       let fi=sm.fileinfo(*self);
@@ -96,7 +88,7 @@ impl Span {
     })
   }
 
-  pub(crate) fn end(&self)-> LineColumn {
+  pub fn end(&self)-> LineColumn {
     SOURCE_MAP.with(|sm| {
       let sm=sm.borrow();
       let fi=sm.fileinfo(*self);
@@ -104,18 +96,18 @@ impl Span {
     })
   }
 
-  pub(crate) fn file(&self)-> String {
+  pub fn file(&self)-> String {
     SOURCE_MAP.with(|sm| {
       let sm=sm.borrow();
       sm.filepath(*self)
     })
   }
 
-  pub(crate) fn local_file(&self)-> Option<PathBuf> {
+  pub fn local_file(&self)-> Option<PathBuf> {
     None
   }
 
-  pub(crate) fn join(&self, other: Span)-> Option<Span> {
+  pub fn join(&self,other: Span)-> Option<Span> {
     SOURCE_MAP.with(|sm| {
       let sm=sm.borrow();
       // If `other` is not within the same FileInfo as us, return None.
@@ -124,13 +116,13 @@ impl Span {
       }
 
       Some(Span {
-        lo: cmp::min(self.lo, other.lo),
-        hi: cmp::max(self.hi, other.hi),
+        lo: cmp::min(self.lo,other.lo),
+        hi: cmp::max(self.hi,other.hi),
       })
     })
   }
 
-  pub(crate) fn source_text(&self)-> Option<Box<str>> {
+  pub fn source_text(&self)-> Option<Box<str>> {
     if self.is_call_site() {
       None
     } else {
@@ -142,14 +134,14 @@ impl Span {
     }
   }
 
-  pub(crate) fn first_byte(self)-> Self {
+  pub fn first_byte(self)-> Self {
     Span {
       lo: self.lo,
       hi: cmp::min(self.lo.saturating_add(1), self.hi),
     }
   }
 
-  pub(crate) fn last_byte(self)-> Self {
+  pub fn last_byte(self)-> Self {
     Span {
       lo: cmp::max(self.hi.saturating_sub(1), self.lo),
       hi: self.hi,
