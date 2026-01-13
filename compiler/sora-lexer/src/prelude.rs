@@ -6,7 +6,6 @@ pub(crate) use crate::{
     LexErr,
     rcvec::*,
     TokenStream,
-    location::LineColumn,
   },
   token::{
     *,

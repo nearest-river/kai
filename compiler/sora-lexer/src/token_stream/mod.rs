@@ -5,9 +5,7 @@ mod group;
 
 pub(crate) mod parse;
 pub(crate) mod rcvec;
-pub(crate) mod location;
-pub(crate) mod file_info;
-pub(crate) mod source_map;
+
 
 
 pub use leaf::Leaf;
@@ -98,6 +96,13 @@ impl TokenTree {
       Self::Leaf(leaf)=> leaf.span(),
       Self::Group(group)=> group.span(),
     }
+  }
+}
+
+impl AsRef<[TokenTree]> for TokenStream {
+  #[inline(always)]
+  fn as_ref(&self)-> &[TokenTree] {
+    &*self.inner.inner
   }
 }
 

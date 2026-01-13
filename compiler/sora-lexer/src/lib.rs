@@ -19,6 +19,11 @@ pub use token::{
   TokenExt,
 };
 
+pub(crate) mod location;
+pub(crate) mod file_info;
+pub(crate) mod source_map;
+
+
 
 
 

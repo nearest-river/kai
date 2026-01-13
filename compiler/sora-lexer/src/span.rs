@@ -1,10 +1,9 @@
 
 use crate::{
   prelude::*,
-  token_stream::{
-    file_info::FileInfo,
-    source_map::SourceMap,
-  },
+  file_info::FileInfo,
+  location::LineColumn,
+  source_map::SourceMap,
 };
 
 use std::{

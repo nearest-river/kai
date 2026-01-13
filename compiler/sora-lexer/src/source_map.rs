@@ -1,7 +1,9 @@
 
-use crate::prelude::*;
 use std::cmp::Ordering;
-use super::file_info::FileInfo;
+use crate::{
+  prelude::*,
+  file_info::FileInfo,
+};
 
 
 pub(crate) struct SourceMap {

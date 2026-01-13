@@ -1,6 +1,9 @@
 
 use std::ops::Range;
-use crate::prelude::*;
+use crate::{
+  prelude::*,
+  location::LineColumn,
+};
 
 
 
