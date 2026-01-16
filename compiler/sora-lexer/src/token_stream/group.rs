@@ -1,5 +1,8 @@
 
-use crate::prelude::*;
+use crate::{
+  prelude::*,
+  token_stream::TokenTree,
+};
 
 use std::fmt::{
   self,
@@ -19,11 +22,11 @@ pub struct Group {
 /// Describes how a sequence of token trees is delimited.
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum Delimiter {
-  Paren,
+  Paren(ParenPair),
   /// `{ ... }`
-  Brace,
+  Brace(BracePair),
   /// `[ ... ]`
-  Bracket,
+  Bracket(BracketPair),
   /// `∅ ... ∅`
   ///
   /// An invisible delimiter, that may, for example, appear around tokens
@@ -49,15 +52,30 @@ pub enum Delimiter {
 
 impl Group {
   pub(crate) fn new(delimiter: Delimiter,stream: TokenStream)-> Self {
+    let span=Self::calc_span(stream.as_ref())
+    .unwrap_or(Span::call_site());
+
     Self {
+      span,
       stream,
       delimiter,
-      span: Span::call_site(),
     }
+  }
+
+  #[inline(always)]
+  fn calc_span(tts: &[TokenTree])-> Option<Span> {
+    let start=tts.first()?.span();
+    let end=tts.last()?.span();
+
+    start.join(end)
   }
 
   pub fn delimiter(&self)-> Delimiter {
     self.delimiter
+  }
+
+  pub fn outer_span(&self)-> Span {
+    self.delimiter.span()
   }
 
   pub fn stream(&self)-> TokenStream {
@@ -110,7 +128,7 @@ impl Debug for Group {
     // Empty braces: { }
     // Nonempty braces: { ... }
     match self.delimiter {
-      Delimiter::Paren=> {
+      Delimiter::Paren(_)=> {
         if self.stream.is_empty() {
           return f.write_str("()");
         }
@@ -122,12 +140,12 @@ impl Debug for Group {
 
         dbg.finish()
       },
-      Delimiter::Brace=> {
+      Delimiter::Brace(_)=> {
         f.debug_set()
         .entries(self.stream.inner.iter())
         .finish()
       }
-      Delimiter::Bracket=> {
+      Delimiter::Bracket(_)=> {
         f.debug_list()
         .entries(self.stream.inner.iter())
         .finish()
@@ -137,8 +155,68 @@ impl Debug for Group {
   }
 }
 
+impl Delimiter {
+  #[inline]
+  pub fn as_chars(&self)-> (char,char) {
+    match self {
+      Self::Paren(_)=> ('(',')'),
+      Self::Brace(_)=> ('{','}'),
+      Self::Bracket(_)=> ('[',']'),
+      Self::None=> (' ',' '),
+    }
+  }
+
+  #[inline(always)]
+  pub fn span(&self)-> Span {
+    match self {
+      Self::Paren(paren)=> paren.span(),
+      Self::Brace(brace)=> brace.span(),
+      Self::Bracket(bracket)=> bracket.span(),
+      Self::None=> Span::call_site(),
+    }
+  }
+}
 
 
+
+macro_rules! declare_deli_pair {
+  ($($vis:vis struct $name:ident($open_ty:ty,$close_ty:ty);)*)=> {
+    $(
+    #[derive(Copy,Clone,Debug,Eq,PartialEq,Hash)]
+    $vis struct $name {
+      pub open: $open_ty,
+      pub close: $close_ty,
+    }
+
+    impl $name {
+      #[inline(always)]
+      pub fn new(open: $open_ty,close: $close_ty)-> Self {
+        Self {
+          open,
+          close,
+        }
+      }
+
+      #[inline(always)]
+      pub fn span(&self)-> Span {
+        // SAFETY: opening and closing delimiters cant possibly to different files.
+        // unless you messed around
+        self.open.span()
+        .join(self.close.span())
+        .unwrap()
+      }
+    }
+    )*
+  };
+}
+
+
+
+declare_deli_pair! {
+  pub struct ParenPair(LParen,RParen);
+  pub struct BracePair(LBrace,RBrace);
+  pub struct BracketPair(LBracket,RBracket);
+}
 
 
 

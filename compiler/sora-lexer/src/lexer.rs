@@ -20,7 +20,6 @@ use tracker::{
 
 
 
-
 pub struct Lexer<'b> {
   buf: &'b [u8],
   cursor: usize,

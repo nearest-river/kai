@@ -1,7 +1,7 @@
 
 mod leaf;
 mod error;
-mod group;
+pub mod group;
 
 pub(crate) mod parse;
 pub(crate) mod rcvec;
@@ -9,11 +9,8 @@ pub(crate) mod rcvec;
 
 
 pub use leaf::Leaf;
+pub use group::Group;
 pub use error::LexErr;
-pub use group::{
-  Group,
-  Delimiter,
-};
 
 use crate::{
   Lexer,
