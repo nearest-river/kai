@@ -74,9 +74,9 @@ impl FileInfo {
     lo_byte..hi_byte
   }
 
-  pub(crate) fn source_text(&mut self,span: Span)-> Box<str> {
+  pub(crate) fn source_text(&mut self,span: Span)-> &str {
     let byte_range=self.byte_range(span);
-    self.source_text[byte_range].into()
+    &self.source_text[byte_range]
   }
 }
 

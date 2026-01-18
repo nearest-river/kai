@@ -59,11 +59,10 @@ pub(crate) fn parse(mut lexer: Lexer<'_>)-> Result<TokenStream,LexErr> {
       continue;
     }
 
-    let leaf=Leaf::try_from(token).expect("this should be unreachable");
     match stack.last_mut() {
-      None=> stream.push_token_from_parser(TokenTree::Leaf(leaf)),
+      None=> stream.push_token_from_parser(TokenTree::Leaf(token)),
       Some((_,_,last))=> {
-        last.push_token_from_parser(TokenTree::Leaf(leaf));
+        last.push_token_from_parser(TokenTree::Leaf(token));
       }
     }
   }

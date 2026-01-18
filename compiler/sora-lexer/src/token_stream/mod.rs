@@ -1,5 +1,4 @@
 
-mod leaf;
 mod error;
 pub mod group;
 
@@ -8,7 +7,6 @@ pub(crate) mod rcvec;
 
 
 
-pub use leaf::Leaf;
 pub use group::Group;
 pub use error::LexErr;
 
@@ -39,7 +37,7 @@ pub struct TokenStream {
 #[derive(Clone)]
 pub enum TokenTree {
   Group(Group),
-  Leaf(Leaf),
+  Leaf(Token),
 }
 
 

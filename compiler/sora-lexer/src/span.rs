@@ -129,6 +129,7 @@ impl Span {
         sm.borrow_mut()
         .fileinfo_mut(*self)
         .source_text(*self)
+        .into()
       }))
     }
   }
